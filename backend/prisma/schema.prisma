@@ -1,0 +1,225 @@
+// Prisma Schema definition for AI Skill Registry Platform
+// Compliant with Section 7 of SRS.md
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// 7.1 User Model
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  displayName  String
+  role         String   @default("DEVELOPER") // DEVELOPER, PUBLISHER, ADMIN
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relationships
+  publishedSkills Skill[]          @relation("UserPublishedSkills")
+  reviews         Review[]
+  votes           Vote[]
+  collections     Collection[]
+  generatedSkills GeneratedSkill[]
+
+  @@index([email])
+}
+
+// 7.2 Skill Model (Logical Identity)
+model Skill {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  description String
+  publisherId String
+  sourceType  String   @default("github") // github, manual, generated
+  sourceUrl   String?
+  sourcePath  String?
+  visibility  String   @default("public") // public, unlisted, private
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  publisher       User             @relation("UserPublishedSkills", fields: [publisherId], references: [id], onDelete: Cascade)
+  versions        SkillVersion[]
+  reviews         Review[]
+  votes           Vote[]
+  collectionItems CollectionItem[]
+
+  @@index([slug])
+  @@index([publisherId])
+  @@index([visibility])
+}
+
+// 7.3 SkillVersion Model (Immutable Release Snapshot)
+model SkillVersion {
+  id              String   @id @default(uuid())
+  skillId         String
+  version         String   // Semantic version e.g. "1.0.0"
+  sourceCommit    String?  // Git commit SHA
+  contentHash     String   // SHA-256 hash of instructions & files
+  contentLocation String   // Storage location or text content
+  readmeContent   String?  // Rendered documentation
+  license         String?  // e.g. "MIT", "Apache-2.0"
+  createdAt       DateTime @default(now())
+  publishedAt     DateTime @default(now())
+
+  // Relationships
+  skill              Skill               @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  securityAssessment SecurityAssessment?
+  qualityAssessment  QualityAssessment?
+
+  // Upstream / Composition relationships
+  asSourceInCompositions SkillComposition[] @relation("SourceSkillVersion")
+
+  @@unique([skillId, version])
+  @@index([skillId])
+  @@index([contentHash])
+}
+
+// 7.4 SecurityAssessment Model (FR-006 & FR-007)
+model SecurityAssessment {
+  id             String    @id @default(uuid())
+  skillVersionId String    @unique
+  scannerName    String    @default("skillspector")
+  scannerVersion String    @default("1.0.0")
+  status         String    @default("NOT_SCANNED") // NOT_SCANNED, SCAN_PENDING, CLEAN, FINDINGS_DETECTED, SCAN_FAILED, MANUAL_REVIEW_REQUIRED
+  score          Int?      // 0 - 100 risk score
+  findings       String?   // JSON-encoded structured findings
+  limitations    String?   // Documented scanner limitations
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  // Relationships
+  skillVersion SkillVersion @relation(fields: [skillVersionId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+// 7.5 QualityAssessment Model (FR-008)
+model QualityAssessment {
+  id             String    @id @default(uuid())
+  skillVersionId String    @unique
+  evaluatorType  String    @default("rule_based") // rule_based, ai_evaluator
+  evaluatorVersion String  @default("1.0.0")
+  criteria       String?   // JSON-encoded evaluation dimensions
+  score          Int?      // 0 - 100 quality score
+  evidence       String?   // JSON-encoded evidence behind score
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  // Relationships
+  skillVersion SkillVersion @relation(fields: [skillVersionId], references: [id], onDelete: Cascade)
+}
+
+// 7.6 Review Model (FR-009)
+model Review {
+  id        String   @id @default(uuid())
+  skillId   String
+  userId    String
+  rating    Int      // 1 to 5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Enforces 1 review per user per skill
+  @@unique([userId, skillId])
+  @@index([skillId])
+}
+
+// 7.7 Vote Model (FR-009)
+model Vote {
+  id        String   @id @default(uuid())
+  skillId   String
+  userId    String
+  voteValue Int      // +1 for upvote, -1 for downvote
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Enforces 1 vote per user per skill
+  @@unique([userId, skillId])
+  @@index([skillId])
+}
+
+// 7.8 Collection Model (FR-010)
+model Collection {
+  id          String   @id @default(uuid())
+  ownerId     String
+  name        String
+  description String?
+  visibility  String   @default("public") // public, private
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  owner User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  items CollectionItem[]
+
+  @@index([ownerId])
+}
+
+// 7.9 CollectionItem Model (FR-010)
+model CollectionItem {
+  id           String   @id @default(uuid())
+  collectionId String
+  skillId      String
+  addedAt      DateTime @default(now())
+
+  // Relationships
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  skill      Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  // Prevents duplicate skills in the same collection
+  @@unique([collectionId, skillId])
+  @@index([collectionId])
+}
+
+// 7.10 GeneratedSkill Model (FR-011)
+model GeneratedSkill {
+  id                 String   @id @default(uuid())
+  ownerId            String
+  name               String
+  description        String
+  contentLocation    String
+  generationMetadata String?  // JSON-encoded generation prompt, model used, reasoning
+  createdAt          DateTime @default(now())
+
+  // Relationships
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Compositions that created this or branch from this
+  compositions SkillComposition[]
+
+  @@index([ownerId])
+}
+
+// 7.11 SkillComposition Model (FR-012)
+model SkillComposition {
+  id                  String   @id @default(uuid())
+  generatedSkillId    String
+  sourceSkillVersionId String
+  relationshipType    String   // extends, modifies, bundles
+  sourceLicense       String?
+  attributionMetadata String?  // JSON-encoded attribution details
+  createdAt           DateTime @default(now())
+
+  // Relationships
+  generatedSkill    GeneratedSkill @relation(fields: [generatedSkillId], references: [id], onDelete: Cascade)
+  sourceSkillVersion SkillVersion   @relation("SourceSkillVersion", fields: [sourceSkillVersionId], references: [id], onDelete: Cascade)
+
+  @@index([generatedSkillId])
+  @@index([sourceSkillVersionId])
+}
