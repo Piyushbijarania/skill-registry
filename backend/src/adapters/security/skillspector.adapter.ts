@@ -32,8 +32,7 @@ export class SkillSpectorAdapter implements ISecurityScanner {
       }
     });
 
-    // 💡 Score Calculation Algorithm (Documented & Configurable):
-    // Starts at 100. Deducts points based on finding severity.
+    // Score calculation: starts at 100 and deducts points based on finding severity
     let score = 100;
     for (const f of findings) {
       switch (f.severity) {

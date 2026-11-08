@@ -194,3 +194,4 @@ runCommunityTests().catch((err) => {
   console.error('❌ Community test error:', err);
   process.exit(1);
 });
+

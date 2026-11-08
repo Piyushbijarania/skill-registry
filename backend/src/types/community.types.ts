@@ -59,3 +59,4 @@ export const addSkillToCollectionSchema = z.object({
 });
 
 export type AddSkillToCollectionInput = z.infer<typeof addSkillToCollectionSchema>;
+

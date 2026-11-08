@@ -25,9 +25,8 @@ export interface ScanResult {
 }
 
 /**
- * 💡 ADAPTER PATTERN INTERFACE (The Contract)
- * Any scanner (SkillSpector, Snyk, Semgrep, or AI scanner)
- * must implement this interface.
+ * Scanner Interface contract.
+ * Supported scanners implement this interface.
  */
 export interface ISecurityScanner {
   readonly name: string;

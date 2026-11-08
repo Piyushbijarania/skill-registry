@@ -25,8 +25,8 @@ export interface DiscoveryResult {
 }
 
 /**
- * 💡 ADAPTER PATTERN FOR AI PROVIDERS (SRS Section 6.4)
- * Allows switching between Mock, OpenAI, Anthropic, or Gemini seamlessly.
+ * Interface contract for AI providers (SRS Section 6.4).
+ * Supports Mock, OpenAI, Anthropic, or Gemini providers.
  */
 export interface IAiProvider {
   readonly providerName: string;

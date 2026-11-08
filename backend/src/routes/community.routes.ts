@@ -24,3 +24,4 @@ router.get('/collections/me', authenticate, listMyCollections);
 router.post('/collections/:id/skills', authenticate, addSkillToCollection);
 
 export const communityRoutes = router;
+

@@ -138,3 +138,4 @@ export const addSkillToCollection = async (
     next(error);
   }
 };
+
