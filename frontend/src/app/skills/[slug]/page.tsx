@@ -140,7 +140,7 @@ export default function SkillDetailPage() {
         <p className="text-xs text-zinc-400">{error || 'This skill does not exist or has been removed.'}</p>
         <Link
           href="/catalog"
-          className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 pt-2 font-mono"
+          className="inline-flex items-center gap-1.5 text-xs text-teal-400 hover:text-teal-300 pt-2 font-mono"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Catalog
         </Link>
@@ -168,11 +168,11 @@ export default function SkillDetailPage() {
       </Link>
 
       {/* Main Skill Header Banner */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800 shadow-2xl backdrop-blur-xl space-y-6">
+      <div className="p-6 sm:p-8 rounded-2xl bg-[#18191e]/80 border border-[#2e3039] shadow-2xl backdrop-blur-xl space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-zinc-800 border border-zinc-700/60 font-mono text-zinc-300 text-xs font-medium">
+              <span className="px-2 py-0.5 rounded bg-[#262830] border border-[#2e3039] font-mono text-[#f4f4f5] text-xs font-medium">
                 {selectedVersion?.version ? `v${selectedVersion.version}` : 'v1.0.0'}
               </span>
 
@@ -187,7 +187,7 @@ export default function SkillDetailPage() {
                   {secScore !== null ? `${secScore}/100 THREATS` : 'FINDINGS'}
                 </span>
               ) : (
-                <span className="px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 text-xs font-mono">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#262830] text-zinc-400 text-xs font-mono">
                   Unscanned
                 </span>
               )}
@@ -197,14 +197,14 @@ export default function SkillDetailPage() {
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#f4f4f5]">
               {skill.name}
             </h1>
             <p className="font-mono text-xs text-zinc-400">/{skill.slug}</p>
           </div>
 
           {/* Voting Box */}
-          <div className="flex items-center gap-1.5 self-start p-1.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs font-mono">
+          <div className="flex items-center gap-1.5 self-start p-1.5 rounded-xl bg-[#121316] border border-[#2e3039] text-xs font-mono">
             <button
               onClick={() => handleVote(1)}
               className={`p-1.5 rounded-lg transition-colors ${
@@ -261,14 +261,14 @@ export default function SkillDetailPage() {
         </div>
 
         {/* Terminal Install Snippet */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-950 border border-zinc-800 font-mono text-xs">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-[#121316] border border-[#2e3039] font-mono text-xs">
           <div className="flex items-center gap-2 text-zinc-300 overflow-x-auto">
-            <Terminal className="w-4 h-4 text-cyan-400 shrink-0" />
+            <Terminal className="w-4 h-4 text-teal-400 shrink-0" />
             <span>agy skill add {skill.slug}@{selectedVersion?.version || '1.0.0'}</span>
           </div>
           <button
             onClick={copyInstall}
-            className="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs flex items-center gap-1 transition-colors shrink-0"
+            className="px-2.5 py-1 rounded bg-[#262830] hover:bg-[#2e3039] text-[#f4f4f5] text-xs flex items-center gap-1 transition-colors shrink-0"
           >
             {copied ? (
               <>
@@ -286,12 +286,12 @@ export default function SkillDetailPage() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex border-b border-zinc-800 font-medium text-sm">
+      <div className="flex border-b border-[#2e3039] font-medium text-sm">
         <button
           onClick={() => setActiveTab('instructions')}
           className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'instructions'
-              ? 'border-cyan-400 text-white font-semibold'
+              ? 'border-teal-400 text-[#f4f4f5] font-semibold'
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -303,7 +303,7 @@ export default function SkillDetailPage() {
           onClick={() => setActiveTab('security')}
           className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'security'
-              ? 'border-cyan-400 text-white font-semibold'
+              ? 'border-teal-400 text-[#f4f4f5] font-semibold'
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -318,7 +318,7 @@ export default function SkillDetailPage() {
           onClick={() => setActiveTab('reviews')}
           className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'reviews'
-              ? 'border-cyan-400 text-white font-semibold'
+              ? 'border-teal-400 text-[#f4f4f5] font-semibold'
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -348,11 +348,11 @@ export default function SkillDetailPage() {
       {activeTab === 'security' && (
         <div className="space-y-6">
           {/* Scanner Header Box */}
-          <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800 space-y-4">
+          <div className="p-6 rounded-2xl bg-[#18191e]/60 border border-[#2e3039] space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-mono text-cyan-400 block">STATIC SECURITY PIPELINE</span>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <span className="text-xs font-mono text-teal-400 block">STATIC SECURITY PIPELINE</span>
+                <h3 className="text-lg font-bold text-[#f4f4f5] flex items-center gap-2">
                   Scanner: {secAssessment?.scannerName || 'NVIDIA SkillSpector'} v{secAssessment?.scannerVersion || '1.2.0'}
                 </h3>
                 <p className="text-xs text-zinc-400 max-w-xl pt-1">
@@ -361,7 +361,7 @@ export default function SkillDetailPage() {
               </div>
 
               {/* Big Score Gauge */}
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 shrink-0">
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#121316] border border-[#2e3039] shrink-0">
                 <div className="text-right">
                   <span className="text-xs font-mono text-zinc-400 block">Security Score</span>
                   <span
@@ -380,7 +380,7 @@ export default function SkillDetailPage() {
             </div>
 
             {/* Scanner Limitations Notice (SRS FR-006) */}
-            <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-800/80 text-xs text-zinc-400 font-mono">
+            <div className="p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-zinc-400 font-mono">
               ⚠️ Note: A clean scan means no known threats were detected by configured static checks; it does not constitute a guarantee of complete runtime immunity.
             </div>
           </div>
@@ -403,7 +403,7 @@ export default function SkillDetailPage() {
               findings.map((f, i) => (
                 <div
                   key={i}
-                  className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-3"
+                  className="p-5 rounded-2xl bg-[#18191e]/70 border border-[#2e3039] space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <span
@@ -412,7 +412,7 @@ export default function SkillDetailPage() {
                           ? 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
                           : f.severity === 'HIGH'
                           ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
-                          : 'bg-zinc-800 text-zinc-300'
+                          : 'bg-[#262830] text-zinc-300'
                       }`}
                     >
                       {f.severity}
@@ -422,17 +422,17 @@ export default function SkillDetailPage() {
                     )}
                   </div>
 
-                  <h5 className="text-sm font-semibold text-white">{f.title}</h5>
+                  <h5 className="text-sm font-semibold text-[#f4f4f5]">{f.title}</h5>
                   <p className="text-xs text-zinc-300">{f.description}</p>
 
                   {f.matchedPattern && (
-                    <pre className="p-2.5 rounded-lg bg-zinc-950 font-mono text-xs text-rose-300 overflow-x-auto">
+                    <pre className="p-2.5 rounded-lg bg-[#121316] font-mono text-xs text-rose-300 overflow-x-auto">
                       {f.matchedPattern}
                     </pre>
                   )}
 
-                  <div className="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-xs text-zinc-400 space-y-1">
-                    <span className="text-cyan-400 font-mono font-semibold block">
+                  <div className="p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-zinc-400 space-y-1">
+                    <span className="text-teal-400 font-mono font-semibold block">
                       Recommended Remediation:
                     </span>
                     <p>{f.remediation}</p>
@@ -450,9 +450,9 @@ export default function SkillDetailPage() {
           {/* Submit Review Box */}
           <form
             onSubmit={handleReviewSubmit}
-            className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4"
+            className="p-5 rounded-2xl bg-[#18191e]/80 border border-[#2e3039] space-y-4"
           >
-            <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-[#f4f4f5] flex items-center gap-2">
               <Star className="w-4 h-4 text-amber-400" />
               Write a Community Review
             </h4>
@@ -494,7 +494,7 @@ export default function SkillDetailPage() {
                 value={commentInput}
                 onChange={(e) => setCommentInput(e.target.value)}
                 placeholder="Share your experience using this skill in an AI agent..."
-                className="w-full p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all resize-none"
+                className="w-full p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-[#f4f4f5] placeholder:text-zinc-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all resize-none"
               />
             </div>
 
@@ -502,7 +502,7 @@ export default function SkillDetailPage() {
               <button
                 type="submit"
                 disabled={isSubmittingReview}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-zinc-950 font-semibold text-xs shadow-md shadow-cyan-500/20 transition-all disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-[#121316] font-semibold text-xs shadow-md shadow-teal-500/20 transition-all disabled:opacity-50"
               >
                 {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
               </button>

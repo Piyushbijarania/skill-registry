@@ -29,7 +29,7 @@ An open ecosystem registry for discovering, evaluating, securing, customizing, a
 ### Frontend
 - **Framework:** Next.js 15 (App Router with Server Components & Client Components)
 - **UI Library:** React 19, Tailwind CSS 3
-- **Design System:** Deep Obsidian minimal dark palette (`#09090b`), high-contrast typography, and Electric Indigo hero accents
+- **Design System:** Charcoal, Off-White & Teal minimal palette (`#121316` canvas, `#f4f4f5` off-white typography, `#14b8a6` luminous teal accents)
 - **Icons:** Lucide React
 
 ---

@@ -10,17 +10,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#09090b', // Deep Obsidian canvas
+        background: '#121316', // Sleek Charcoal
         surface: {
-          DEFAULT: '#111115',
-          subtle: '#18181b',
-          border: '#27272a',
+          DEFAULT: '#18191e',
+          subtle: '#1f2127',
+          card: '#262830',
+          border: '#2e3039',
         },
         brand: {
-          50: '#f0f9ff',
-          400: '#38bdf8', // Sky Blue
-          500: '#0ea5e9', // Electric Cyan
-          600: '#0284c7',
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf', // Luminous Teal
+          500: '#14b8a6', // Primary Teal
+          600: '#0d9488', // Deep Teal
+          700: '#0f766e',
         },
       },
       fontFamily: {

@@ -49,13 +49,13 @@ export default function CatalogPage() {
   return (
     <div className="space-y-8 pb-16">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2e3039]/80 pb-6">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
+          <div className="flex items-center gap-2 text-xs font-mono text-teal-400">
             <Compass className="w-4 h-4" />
             <span>PUBLIC REGISTRY</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#f4f4f5]">
             Skill Catalog
           </h1>
           <p className="text-xs text-zinc-400">
@@ -65,7 +65,7 @@ export default function CatalogPage() {
 
         {/* Total Count Pill */}
         <div className="flex items-center gap-2 self-start sm:self-center">
-          <span className="px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 font-mono">
+          <span className="px-3 py-1 rounded-full bg-[#18191e] border border-[#2e3039] text-xs text-zinc-400 font-mono">
             {totalCount} {totalCount === 1 ? 'skill indexed' : 'skills indexed'}
           </span>
         </div>
@@ -83,7 +83,7 @@ export default function CatalogPage() {
               setPage(1); // Reset to page 1 on new search
             }}
             placeholder="Search skills by name, technology (e.g. Next.js, Python), or slug..."
-            className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+            className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-[#18191e]/80 border border-[#2e3039] text-sm text-[#f4f4f5] placeholder:text-zinc-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
           />
           {searchTerm && (
             <button
@@ -100,7 +100,7 @@ export default function CatalogPage() {
 
         <button
           onClick={() => fetchSkills(debouncedSearch, page)}
-          className="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-medium text-zinc-300 flex items-center justify-center gap-2 transition-colors"
+          className="px-4 py-2.5 rounded-xl bg-[#18191e] hover:bg-[#1f2127] border border-[#2e3039] text-xs font-medium text-zinc-300 flex items-center justify-center gap-2 transition-colors"
           title="Refresh"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
@@ -127,17 +127,17 @@ export default function CatalogPage() {
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <div
               key={n}
-              className="h-48 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 animate-pulse p-5 space-y-4"
+              className="h-48 rounded-2xl bg-[#18191e]/50 border border-[#2e3039] animate-pulse p-5 space-y-4"
             >
-              <div className="h-4 bg-zinc-800 rounded w-1/3" />
-              <div className="h-6 bg-zinc-800 rounded w-2/3" />
-              <div className="h-10 bg-zinc-800/60 rounded w-full" />
+              <div className="h-4 bg-[#262830] rounded w-1/3" />
+              <div className="h-6 bg-[#262830] rounded w-2/3" />
+              <div className="h-10 bg-[#262830]/60 rounded w-full" />
             </div>
           ))}
         </div>
       ) : skills.length === 0 ? (
-        <div className="text-center py-16 space-y-3 rounded-2xl border border-dashed border-zinc-800/80 bg-zinc-900/10">
-          <p className="text-sm font-medium text-zinc-300">No skills found matching your search</p>
+        <div className="text-center py-16 space-y-3 rounded-2xl border border-dashed border-[#2e3039] bg-[#18191e]/30">
+          <p className="text-sm font-medium text-[#f4f4f5]">No skills found matching your search</p>
           <p className="text-xs text-zinc-400 max-w-sm mx-auto">
             Try searching for broader keywords like &quot;Next.js&quot;, &quot;security&quot;, or &quot;python&quot;.
           </p>
@@ -147,7 +147,7 @@ export default function CatalogPage() {
                 setSearchTerm('');
                 setPage(1);
               }}
-              className="text-xs text-cyan-400 hover:underline pt-2 inline-block"
+              className="text-xs text-teal-400 hover:underline pt-2 inline-block"
             >
               Clear search filter
             </button>
@@ -163,11 +163,11 @@ export default function CatalogPage() {
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 pt-6 border-t border-zinc-800/80">
+        <div className="flex items-center justify-center gap-3 pt-6 border-t border-[#2e3039]">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1 || isLoading}
-            className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-100 disabled:opacity-40 transition-colors"
+            className="p-2 rounded-lg bg-[#18191e] border border-[#2e3039] text-zinc-400 hover:text-[#f4f4f5] disabled:opacity-40 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -177,7 +177,7 @@ export default function CatalogPage() {
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages || isLoading}
-            className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-100 disabled:opacity-40 transition-colors"
+            className="p-2 rounded-lg bg-[#18191e] border border-[#2e3039] text-zinc-400 hover:text-[#f4f4f5] disabled:opacity-40 transition-colors"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

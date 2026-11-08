@@ -18,10 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col selection:bg-cyan-500/30 selection:text-white">
+      <body className="min-h-screen bg-[#121316] text-[#f4f4f5] flex flex-col selection:bg-teal-500/30 selection:text-white">
         <AuthProvider>
-          {/* Subtle Ambient Cyan Glow */}
-          <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[220px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none -z-10" />
+          {/* Subtle Ambient Teal Glow */}
+          <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[220px] bg-teal-500/10 blur-[130px] rounded-full pointer-events-none -z-10" />
 
           {/* Dynamic Top Navbar */}
           <Navbar />
@@ -32,7 +32,7 @@ export default function RootLayout({
           </main>
 
           {/* Footer */}
-          <footer className="w-full border-t border-zinc-800/60 bg-[#09090b] py-6 text-xs text-zinc-400">
+          <footer className="w-full border-t border-zinc-800/60 bg-[#121316] py-6 text-xs text-zinc-400">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-emerald-400" />
