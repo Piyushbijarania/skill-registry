@@ -3,6 +3,7 @@ import { healthRoutes } from './health.routes';
 import { authRoutes } from './auth.routes';
 import { skillRoutes } from './skill.routes';
 import { discoveryRoutes } from './discovery.routes';
+import { compositionRoutes } from './composition.routes';
 
 const apiV1Router = Router();
 
@@ -11,5 +12,6 @@ apiV1Router.use('/health', healthRoutes);
 apiV1Router.use('/auth', authRoutes);
 apiV1Router.use('/skills', skillRoutes);
 apiV1Router.use('/discovery', discoveryRoutes);
+apiV1Router.use('/composition', compositionRoutes);
 
 export { apiV1Router };

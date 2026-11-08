@@ -11,3 +11,4 @@ const router = Router();
 router.post('/', discoverSkills);
 
 export const discoveryRoutes = router;
+
