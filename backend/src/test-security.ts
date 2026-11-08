@@ -147,3 +147,4 @@ runSecurityTests().catch((err) => {
   console.error('❌ Security test error:', err);
   process.exit(1);
 });
+
