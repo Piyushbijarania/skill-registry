@@ -2,6 +2,7 @@ import { prisma } from '../config/db';
 import { CreateSkillInput, PublishVersionInput, ListSkillsQuery } from '../types/skill.types';
 import { calculateSha256 } from '../utils/hash';
 import { ConflictError, NotFoundError, ForbiddenError } from '../utils/errors';
+import { securityService } from './security.service';
 
 export class SkillService {
   /**
@@ -174,7 +175,7 @@ export class SkillService {
     const contentHash = calculateSha256(input.readmeContent);
 
     // 5. Store the immutable version snapshot
-    return prisma.skillVersion.create({
+    const version = await prisma.skillVersion.create({
       data: {
         skillId: skill.id,
         version: input.version,
@@ -185,6 +186,14 @@ export class SkillService {
         license: input.license,
       },
     });
+
+    // 6. Queue/Run automated security assessment (SRS FR-004 & FR-006)
+    const securityAssessment = await securityService.scanSkillVersion(version.id);
+
+    return {
+      ...version,
+      securityAssessment,
+    };
   }
 }
 

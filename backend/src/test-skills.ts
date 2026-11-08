@@ -139,3 +139,4 @@ runSkillTests().catch((err) => {
   console.error('❌ Skill test error:', err);
   process.exit(1);
 });
+

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { skillService } from '../services/skill.service';
+import { securityService } from '../services/security.service';
 import {
   createSkillSchema,
   publishVersionSchema,
@@ -95,6 +96,27 @@ export const publishVersion = async (
     );
 
     sendSuccess(res, version, 'Skill version published successfully', 201);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller: Get security assessment report for a skill version
+ * @route GET /api/v1/skills/:slug/versions/:version/security
+ */
+export const getSecurityReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const slug = req.params.slug as string;
+    const version = req.params.version as string;
+
+    const report = await securityService.getAssessment(slug, version);
+
+    sendSuccess(res, report, 'Security assessment report retrieved successfully', 200);
   } catch (error) {
     next(error);
   }

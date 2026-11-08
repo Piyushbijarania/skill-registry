@@ -4,6 +4,7 @@ import {
   getSkillBySlug,
   createSkill,
   publishVersion,
+  getSecurityReport,
 } from '../controllers/skill.controller';
 import { authenticate, authorize } from '../middlewares/auth.middleware';
 
@@ -41,5 +42,12 @@ router.post(
   authorize('PUBLISHER', 'ADMIN'),
   publishVersion
 );
+
+/**
+ * @route   GET /api/v1/skills/:slug/versions/:version/security
+ * @desc    Get detailed security audit findings and risk score for a skill version
+ * @access  Public
+ */
+router.get('/:slug/versions/:version/security', getSecurityReport);
 
 export const skillRoutes = router;
