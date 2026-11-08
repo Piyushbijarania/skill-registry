@@ -107,3 +107,4 @@ runCompositionTests().catch((err) => {
   console.error('❌ Composition test error:', err);
   process.exit(1);
 });
+

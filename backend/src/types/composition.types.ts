@@ -47,3 +47,4 @@ export const generateSkillSchema = z.object({
 });
 
 export type GenerateSkillInput = z.infer<typeof generateSkillSchema>;
+

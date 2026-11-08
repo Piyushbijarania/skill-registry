@@ -19,3 +19,4 @@ router.post('/compose', authenticate, composeSkills);
 router.post('/generate', authenticate, generateSkill);
 
 export const compositionRoutes = router;
+
