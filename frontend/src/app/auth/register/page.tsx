@@ -37,7 +37,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md p-8 rounded-2xl bg-zinc-900/60 border border-zinc-800 shadow-2xl backdrop-blur-xl space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-1">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mb-1">
             <Sparkles className="w-5 h-5" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-white">Join the Registry</h1>
@@ -66,7 +66,7 @@ export default function RegisterPage() {
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Sarah Chen"
-                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all"
               />
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="sarah@developer.io"
-                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all"
               />
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all"
               />
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 onClick={() => setRole('DEVELOPER')}
                 className={`py-2 px-3 rounded-lg text-xs font-medium border text-center transition-all ${
                   role === 'DEVELOPER'
-                    ? 'bg-indigo-600/10 border-indigo-500 text-indigo-400 font-semibold'
+                    ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 font-semibold'
                     : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -122,7 +122,7 @@ export default function RegisterPage() {
                 onClick={() => setRole('PUBLISHER')}
                 className={`py-2 px-3 rounded-lg text-xs font-medium border text-center transition-all ${
                   role === 'PUBLISHER'
-                    ? 'bg-indigo-600/10 border-indigo-500 text-indigo-400 font-semibold'
+                    ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 font-semibold'
                     : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-zinc-200'
                 }`}
               >
@@ -134,7 +134,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full mt-2 py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition-all disabled:opacity-50"
+            className="w-full mt-2 py-2.5 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-zinc-950 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50"
           >
             {isSubmitting ? (
               <span className="inline-block animate-pulse">Creating Account...</span>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
           Already registered?{' '}
           <Link
             href="/auth/login"
-            className="text-indigo-400 hover:text-indigo-300 font-medium underline underline-offset-4"
+            className="text-cyan-400 hover:text-cyan-300 font-medium underline underline-offset-4"
           >
             Sign in
           </Link>

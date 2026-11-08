@@ -140,7 +140,7 @@ export default function SkillDetailPage() {
         <p className="text-xs text-zinc-400">{error || 'This skill does not exist or has been removed.'}</p>
         <Link
           href="/catalog"
-          className="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:underline pt-2 font-mono"
+          className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 pt-2 font-mono"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Catalog
         </Link>
@@ -263,7 +263,7 @@ export default function SkillDetailPage() {
         {/* Terminal Install Snippet */}
         <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-950 border border-zinc-800 font-mono text-xs">
           <div className="flex items-center gap-2 text-zinc-300 overflow-x-auto">
-            <Terminal className="w-4 h-4 text-indigo-400 shrink-0" />
+            <Terminal className="w-4 h-4 text-cyan-400 shrink-0" />
             <span>agy skill add {skill.slug}@{selectedVersion?.version || '1.0.0'}</span>
           </div>
           <button
@@ -291,7 +291,7 @@ export default function SkillDetailPage() {
           onClick={() => setActiveTab('instructions')}
           className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'instructions'
-              ? 'border-indigo-500 text-white font-semibold'
+              ? 'border-cyan-400 text-white font-semibold'
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -303,7 +303,7 @@ export default function SkillDetailPage() {
           onClick={() => setActiveTab('security')}
           className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'security'
-              ? 'border-indigo-500 text-white font-semibold'
+              ? 'border-cyan-400 text-white font-semibold'
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -318,7 +318,7 @@ export default function SkillDetailPage() {
           onClick={() => setActiveTab('reviews')}
           className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
             activeTab === 'reviews'
-              ? 'border-indigo-500 text-white font-semibold'
+              ? 'border-cyan-400 text-white font-semibold'
               : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -351,7 +351,7 @@ export default function SkillDetailPage() {
           <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-mono text-indigo-400 block">STATIC SECURITY PIPELINE</span>
+                <span className="text-xs font-mono text-cyan-400 block">STATIC SECURITY PIPELINE</span>
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
                   Scanner: {secAssessment?.scannerName || 'NVIDIA SkillSpector'} v{secAssessment?.scannerVersion || '1.2.0'}
                 </h3>
@@ -432,7 +432,7 @@ export default function SkillDetailPage() {
                   )}
 
                   <div className="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-xs text-zinc-400 space-y-1">
-                    <span className="text-indigo-400 font-mono font-semibold block">
+                    <span className="text-cyan-400 font-mono font-semibold block">
                       Recommended Remediation:
                     </span>
                     <p>{f.remediation}</p>
@@ -494,7 +494,7 @@ export default function SkillDetailPage() {
                 value={commentInput}
                 onChange={(e) => setCommentInput(e.target.value)}
                 placeholder="Share your experience using this skill in an AI agent..."
-                className="w-full p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+                className="w-full p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all resize-none"
               />
             </div>
 
@@ -502,7 +502,7 @@ export default function SkillDetailPage() {
               <button
                 type="submit"
                 disabled={isSubmittingReview}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs shadow-md shadow-indigo-600/20 transition-all disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-zinc-950 font-semibold text-xs shadow-md shadow-cyan-500/20 transition-all disabled:opacity-50"
               >
                 {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
               </button>

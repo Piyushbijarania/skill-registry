@@ -51,7 +51,7 @@ export default function CatalogPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-6">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-xs font-mono text-indigo-400">
+          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
             <Compass className="w-4 h-4" />
             <span>PUBLIC REGISTRY</span>
           </div>
@@ -83,7 +83,7 @@ export default function CatalogPage() {
               setPage(1); // Reset to page 1 on new search
             }}
             placeholder="Search skills by name, technology (e.g. Next.js, Python), or slug..."
-            className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
           />
           {searchTerm && (
             <button
@@ -147,7 +147,7 @@ export default function CatalogPage() {
                 setSearchTerm('');
                 setPage(1);
               }}
-              className="text-xs text-indigo-400 hover:underline pt-2 inline-block"
+              className="text-xs text-cyan-400 hover:underline pt-2 inline-block"
             >
               Clear search filter
             </button>

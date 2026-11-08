@@ -38,7 +38,7 @@ export function SkillCard({ skill }: { skill: SkillItem }) {
   return (
     <Link
       href={`/skills/${skill.slug}`}
-      className="group relative flex flex-col justify-between p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/70 transition-all duration-200 hover:shadow-xl hover:shadow-indigo-500/5"
+      className="group relative flex flex-col justify-between p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 hover:bg-zinc-900/70 transition-all duration-200 hover:shadow-xl hover:shadow-cyan-500/5"
     >
       <div className="space-y-3">
         {/* Top Badges */}
@@ -76,10 +76,10 @@ export function SkillCard({ skill }: { skill: SkillItem }) {
         {/* Skill Title & Slug */}
         <div className="space-y-1">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-white group-hover:text-indigo-300 transition-colors tracking-tight text-base">
+            <h3 className="font-semibold text-white group-hover:text-cyan-300 transition-colors tracking-tight text-base">
               {skill.name}
             </h3>
-            <ArrowUpRight className="w-4 h-4 text-zinc-600 group-hover:text-indigo-400 transition-all transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="w-4 h-4 text-zinc-600 group-hover:text-cyan-400 transition-all transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
           <p className="font-mono text-[11px] text-zinc-400">/{skill.slug}</p>
         </div>

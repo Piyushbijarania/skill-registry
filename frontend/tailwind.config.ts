@@ -12,14 +12,15 @@ const config: Config = {
       colors: {
         background: '#09090b', // Deep Obsidian canvas
         surface: {
-          DEFAULT: '#121215',
+          DEFAULT: '#111115',
           subtle: '#18181b',
           border: '#27272a',
         },
         brand: {
-          50: '#eef2ff',
-          500: '#6366f1', // Electric Indigo
-          600: '#4f46e5',
+          50: '#f0f9ff',
+          400: '#38bdf8', // Sky Blue
+          500: '#0ea5e9', // Electric Cyan
+          600: '#0284c7',
         },
       },
       fontFamily: {
@@ -31,4 +32,3 @@ const config: Config = {
 };
 
 export default config;
-

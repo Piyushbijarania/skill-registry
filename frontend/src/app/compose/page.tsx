@@ -142,7 +142,7 @@ export default function ComposePage() {
     <div className="space-y-10 pb-20 max-w-5xl mx-auto">
       {/* Header */}
       <div className="text-center space-y-3 pt-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono">
           <Layers className="w-3.5 h-3.5" />
           <span>Composition Engine • Provenance & License Tracking</span>
         </div>
@@ -165,7 +165,7 @@ export default function ComposePage() {
             }}
             className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${
               mode === 'compose'
-                ? 'bg-indigo-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-cyan-500 to-sky-500 text-zinc-950 font-bold shadow-md'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -178,7 +178,7 @@ export default function ComposePage() {
             }}
             className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${
               mode === 'generate'
-                ? 'bg-indigo-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-cyan-500 to-sky-500 text-zinc-950 font-bold shadow-md'
                 : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
@@ -200,7 +200,7 @@ export default function ComposePage() {
         <form onSubmit={handleCompose} className="space-y-6">
           <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4 shadow-xl backdrop-blur-xl">
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 text-xs flex items-center justify-center font-mono">
+              <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-mono">
                 1
               </span>
               Select Building Blocks (Choose 2 or more skills)
@@ -222,7 +222,7 @@ export default function ComposePage() {
                       onClick={() => ver && toggleSelectSkill(ver.id)}
                       className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-start justify-between gap-3 ${
                         isSelected
-                          ? 'bg-indigo-600/15 border-indigo-500 text-white'
+                          ? 'bg-cyan-500/15 border-cyan-500 text-white'
                           : 'bg-zinc-950/60 border-zinc-800 text-zinc-400 hover:border-zinc-700'
                       }`}
                     >
@@ -235,7 +235,7 @@ export default function ComposePage() {
                       <div
                         className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 mt-0.5 ${
                           isSelected
-                            ? 'bg-indigo-600 border-indigo-500 text-white'
+                            ? 'bg-cyan-500 border-cyan-400 text-zinc-950'
                             : 'border-zinc-700 bg-zinc-900'
                         }`}
                       >
@@ -254,7 +254,7 @@ export default function ComposePage() {
           {/* Bundle Metadata */}
           <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4 shadow-xl backdrop-blur-xl">
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 text-xs flex items-center justify-center font-mono">
+              <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-mono">
                 2
               </span>
               Bundle Metadata & Custom Rules
@@ -269,7 +269,7 @@ export default function ComposePage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Next.js Secure Enterprise Stack"
-                  className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400"
                 />
               </div>
 
@@ -281,7 +281,7 @@ export default function ComposePage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="e.g. Combines Next.js App Router patterns with NVIDIA SkillSpector security checks"
-                  className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400"
                 />
               </div>
             </div>
@@ -295,7 +295,7 @@ export default function ComposePage() {
                 value={customInstructions}
                 onChange={(e) => setCustomInstructions(e.target.value)}
                 placeholder="Specify any custom overrides, e.g. 'Always use strict TypeScript types and enforce Zod validation on API endpoints'..."
-                className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 resize-none"
+                className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 resize-none"
               />
             </div>
 
@@ -303,7 +303,7 @@ export default function ComposePage() {
               <button
                 type="submit"
                 disabled={isProcessing || selectedVersionIds.length < 2}
-                className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-zinc-950 font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/25 transition-all disabled:opacity-50"
               >
                 {isProcessing ? 'Composing & Auditing...' : 'Compose Skill Bundle'}
                 <ArrowRight className="w-4 h-4 ml-1" />
@@ -318,7 +318,7 @@ export default function ComposePage() {
         <form onSubmit={handleGenerate} className="space-y-6">
           <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4 shadow-xl backdrop-blur-xl">
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-indigo-400" />
+              <Sparkles className="w-4 h-4 text-cyan-400" />
               Describe Desired Capability
             </h3>
 
@@ -330,7 +330,7 @@ export default function ComposePage() {
                 value={genName}
                 onChange={(e) => setGenName(e.target.value)}
                 placeholder="e.g. React Accessibility Enforcer"
-                className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500"
+                className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400"
               />
             </div>
 
@@ -342,7 +342,7 @@ export default function ComposePage() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Describe what the AI agent skill should do, what coding patterns it should enforce, and any specific unit test requirements..."
-                className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 resize-none"
+                className="w-full p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-400 resize-none"
               />
             </div>
 
@@ -350,7 +350,7 @@ export default function ComposePage() {
               <button
                 type="submit"
                 disabled={isProcessing || !genName || !prompt}
-                className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-500 hover:from-cyan-400 hover:to-sky-400 text-zinc-950 font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/25 transition-all disabled:opacity-50"
               >
                 {isProcessing ? 'Generating Skill...' : 'Generate Skill'}
                 <Sparkles className="w-4 h-4 ml-1" />
@@ -366,7 +366,7 @@ export default function ComposePage() {
           <div className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
               <div>
-                <span className="text-xs font-mono text-indigo-400 block">RESULT & PROVENANCE</span>
+                <span className="text-xs font-mono text-cyan-400 block">RESULT & PROVENANCE</span>
                 <h3 className="text-xl font-bold text-white">
                   {result.generatedSkill?.name || 'Composed Skill'}
                 </h3>
@@ -395,7 +395,7 @@ export default function ComposePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Provenance Box */}
               <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2 text-xs">
-                <span className="text-indigo-400 font-mono font-semibold block">
+                <span className="text-cyan-400 font-mono font-semibold block">
                   Provenance & License Attribution
                 </span>
                 <p className="text-zinc-300">
@@ -418,7 +418,7 @@ export default function ComposePage() {
 
               {/* Independent Audit Box */}
               <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2 text-xs">
-                <span className="text-indigo-400 font-mono font-semibold block">
+                <span className="text-cyan-400 font-mono font-semibold block">
                   Independent Security Audit
                 </span>
                 <div className="flex items-center gap-2">
@@ -448,7 +448,7 @@ export default function ComposePage() {
             {/* Live SKILL.md Content Preview */}
             <div className="space-y-2">
               <span className="text-xs font-mono text-zinc-400 block flex items-center gap-1.5">
-                <FileCode className="w-3.5 h-3.5 text-indigo-400" />
+                <FileCode className="w-3.5 h-3.5 text-cyan-400" />
                 Preview: Generated SKILL.md
               </span>
               <pre className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 font-mono text-xs text-zinc-300 whitespace-pre-wrap max-h-72 overflow-y-auto leading-relaxed">

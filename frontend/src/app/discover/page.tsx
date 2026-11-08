@@ -78,7 +78,7 @@ export default function DiscoverPage() {
     <div className="space-y-10 pb-20 max-w-4xl mx-auto">
       {/* Header */}
       <div className="text-center space-y-3 pt-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Grounded AI Retrieval • Zero Hallucinations</span>
         </div>
@@ -106,7 +106,7 @@ export default function DiscoverPage() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="e.g. I am building a Next.js 15 SaaS application with PostgreSQL and need help with authentication, testing, and production deployment..."
-            className="w-full p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none"
+            className="w-full p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all resize-none"
           />
         </div>
 
@@ -130,7 +130,7 @@ export default function DiscoverPage() {
           <button
             type="submit"
             disabled={isAnalyzing}
-            className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50 hover:scale-102"
+            className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50 hover:scale-102"
           >
             {isAnalyzing ? (
               <>
@@ -162,7 +162,7 @@ export default function DiscoverPage() {
           <div className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <span className="text-zinc-400 font-mono">PARSED GOAL & TECHNOLOGIES</span>
-              <span className="text-indigo-400 font-mono text-[11px]">
+              <span className="text-cyan-400 font-mono text-[11px]">
                 Engine: {result.providerUsed}
               </span>
             </div>
@@ -173,7 +173,7 @@ export default function DiscoverPage() {
               {result.parsedIntent.identifiedTechnologies.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono"
+                  className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-mono"
                 >
                   {tech}
                 </span>
@@ -214,7 +214,7 @@ export default function DiscoverPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/skills/${rec.slug}`}
-                          className="text-base font-bold text-white hover:text-indigo-300 transition-colors"
+                          className="text-base font-bold text-white hover:text-cyan-300 transition-colors"
                         >
                           {rec.name}
                         </Link>
@@ -223,7 +223,7 @@ export default function DiscoverPage() {
                     </div>
 
                     <div className="self-start sm:self-center">
-                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-mono font-semibold">
+                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-cyan-500/10 to-sky-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold">
                         {Math.round(rec.confidenceScore * 100)}% Match
                       </span>
                     </div>
@@ -231,7 +231,7 @@ export default function DiscoverPage() {
 
                   {/* Why Recommended Explanation */}
                   <div className="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800/60 text-xs text-zinc-300 leading-relaxed">
-                    <span className="text-indigo-400 font-semibold font-mono mr-1.5">
+                    <span className="text-cyan-400 font-semibold font-mono mr-1.5">
                       Why Recommended:
                     </span>
                     {rec.reason}
@@ -258,7 +258,7 @@ export default function DiscoverPage() {
                         </>
                       ) : (
                         <>
-                          <Terminal className="w-3.5 h-3.5 text-indigo-400" />
+                          <Terminal className="w-3.5 h-3.5 text-cyan-400" />
                           <span>agy skill add {rec.slug}@1.0.0</span>
                           <Copy className="w-3 h-3 text-zinc-400 ml-1" />
                         </>
