@@ -1,322 +1,425 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
+  Search,
   Sparkles,
   ShieldCheck,
   Layers,
   ArrowRight,
-  Terminal,
-  Search,
+  Package,
   CheckCircle2,
   Users,
   UploadCloud,
-  FileCode,
-  Lock,
-  GitBranch,
-  Cpu,
   Compass,
+  Terminal,
+  Copy,
+  Check,
+  Lock,
 } from 'lucide-react';
+import { HomeHeroStudio } from '@/components/HomeHeroStudio';
 
 export default function HomePage() {
+  const router = useRouter();
+  const [heroSearch, setHeroSearch] = useState('');
+  const [copiedCli, setCopiedCli] = useState(false);
+
+  const handleHeroSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (heroSearch.trim()) {
+      router.push(`/catalog?q=${encodeURIComponent(heroSearch.trim())}`);
+    } else {
+      router.push('/catalog');
+    }
+  };
+
+  const handleCopyQuickstart = () => {
+    navigator.clipboard.writeText('agy skill add nvidia-skillspector@1.2.0');
+    setCopiedCli(true);
+    setTimeout(() => setCopiedCli(false), 2000);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center pt-6 pb-20 space-y-24">
-      {/* 1. Hero Section */}
-      <div className="flex flex-col items-center text-center max-w-4xl space-y-6 pt-4">
-        {/* Subtle Tech Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-mono shadow-sm">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>The Package Registry for Autonomous AI Agents</span>
+    <div className="w-full flex flex-col items-center space-y-24 pb-24 pt-4">
+      {/* 1. npmjs-Style Hero Section: Big Search & Quickstart */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center space-y-8">
+        {/* Anti-slop category badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-mono">
+          <Package className="w-3.5 h-3.5" />
+          <span>THE PACKAGE REGISTRY FOR AUTONOMOUS AI AGENTS</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#f4f4f5] leading-tight">
-          Discover, Audit & Compose{' '}
+        {/* Primary headline (Developer-first, direct like npmjs) */}
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-[#f4f4f5] max-w-4xl leading-[1.12]">
+          Build reliable AI agents with{' '}
           <span className="bg-gradient-to-r from-teal-400 via-teal-200 to-teal-400 bg-clip-text text-transparent">
-            AI Agent Skills
+            audited packages
           </span>
         </h1>
 
-        <p className="text-sm sm:text-base text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-          An open platform for finding trustworthy agent capabilities. Grounded intent discovery,
-          transparent static analysis powered by NVIDIA SkillSpector, and license-compliant composition.
+        {/* Concrete subtext with real engineering specifics */}
+        <p className="text-sm sm:text-base text-zinc-400 max-w-2xl leading-relaxed">
+          Search, install, and publish verified capabilities for autonomous agents.
+          Static AST security analysis powered by NVIDIA SkillSpector rules and SHA-256 integrity verification.
         </p>
 
-        {/* Primary Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto">
-          <Link
-            href="/discover"
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-[#121316] font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-teal-500/20 transition-all hover:scale-102"
-          >
-            <Sparkles className="w-4 h-4 text-[#121316]" />
-            Try Natural Language Discovery
-            <ArrowRight className="w-4 h-4 ml-1" />
-          </Link>
-          <Link
-            href="/catalog"
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#18191e] hover:bg-[#1f2127] text-[#f4f4f5] border border-[#2e3039] font-medium text-sm flex items-center justify-center gap-2 transition-all hover:border-[#3f424e]"
-          >
-            <Search className="w-4 h-4 text-zinc-400" />
-            Explore Verified Catalog
-          </Link>
-        </div>
+        {/* npmjs-Style Massive Search Input */}
+        <div className="w-full max-w-2xl mx-auto">
+          <form onSubmit={handleHeroSearch} className="relative">
+            <Search className="w-5 h-5 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={heroSearch}
+              onChange={(e) => setHeroSearch(e.target.value)}
+              placeholder="Search packages (e.g. nvidia-skillspector, gemini, docker, python)..."
+              className="w-full pl-12 pr-28 py-3.5 rounded-xl bg-[#18191e] border border-[#2e3039] text-sm text-[#f4f4f5] placeholder:text-zinc-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/40 shadow-xl font-mono transition-all"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-[#121316] text-xs font-bold transition-all shadow-sm shadow-teal-500/20"
+            >
+              Search
+            </button>
+          </form>
 
-        {/* Live Terminal Installation Bar */}
-        <div className="w-full max-w-2xl mt-4 rounded-2xl bg-[#18191e]/90 border border-[#2e3039] p-4 shadow-2xl backdrop-blur-md text-left font-mono text-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-[#2e3039] text-zinc-400 text-[11px]">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              <span className="ml-2 text-zinc-400">Terminal CLI</span>
-            </div>
-            <span>Cross-Agent Portable</span>
-          </div>
-          <div className="pt-3 space-y-1.5 text-zinc-300">
-            <p className="text-zinc-400"># Install audited NVIDIA SkillSpector capability</p>
-            <p className="text-teal-400 flex items-center gap-2 font-medium">
-              <Terminal className="w-4 h-4 text-teal-400 shrink-0" />
-              agy skill add nvidia-skillspector@1.2.0
-            </p>
-            <p className="text-[11px] text-zinc-400 pt-1">
-              ✔ Verified SHA-256: 9c5d1e8a... • Score: 100/100 (CLEAN) • License: Apache-2.0
-            </p>
+          {/* Quick search tags */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs font-mono text-zinc-500">
+            <span>Popular:</span>
+            {['nvidia-skillspector', 'google-gemini-live-api', 'docker-container-manager'].map((pkg) => (
+              <button
+                key={pkg}
+                onClick={() => router.push(`/skills/${pkg}`)}
+                className="text-zinc-400 hover:text-teal-400 hover:underline transition-colors"
+              >
+                {pkg}
+              </button>
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* 2. Explanatory Section: "Which Account is for Whom?" */}
-      <div className="w-full max-w-5xl space-y-8">
-        <div className="text-center space-y-2">
+        {/* npmjs-Style Quickstart CLI Box */}
+        <div className="w-full max-w-xl mx-auto p-3 rounded-xl bg-[#18191e] border border-[#2e3039] flex items-center justify-between text-xs font-mono">
+          <div className="flex items-center gap-2 text-zinc-300 truncate mr-2">
+            <Terminal className="w-4 h-4 text-teal-400 shrink-0" />
+            <span className="truncate">agy skill add nvidia-skillspector@1.2.0</span>
+          </div>
+          <button
+            onClick={handleCopyQuickstart}
+            className="px-3 py-1.5 rounded-lg bg-[#262830] hover:bg-[#2e3039] text-zinc-300 hover:text-white transition-colors flex items-center gap-1.5 shrink-0"
+          >
+            {copiedCli ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-emerald-400">Copied</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5 text-zinc-400" />
+                <span>Copy</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* npmjs-Style Live Audit Studio */}
+        <div className="w-full pt-6">
+          <HomeHeroStudio />
+        </div>
+      </section>
+
+      {/* 2. Registry Stats Ticker (npmjs style) */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl bg-[#18191e] border border-[#2e3039] text-center font-mono">
+          <div className="space-y-1">
+            <span className="text-2xl font-bold text-teal-400">100%</span>
+            <p className="text-xs text-zinc-400">Static AST Audited</p>
+          </div>
+          <div className="space-y-1">
+            <span className="text-2xl font-bold text-[#f4f4f5]">0-Threat</span>
+            <p className="text-xs text-zinc-400">NVIDIA SkillSpector Rules</p>
+          </div>
+          <div className="space-y-1">
+            <span className="text-2xl font-bold text-teal-400">SHA-256</span>
+            <p className="text-xs text-zinc-400">Immutable Integrity</p>
+          </div>
+          <div className="space-y-1">
+            <span className="text-2xl font-bold text-[#f4f4f5]">Cross-Agent</span>
+            <p className="text-xs text-zinc-400">AGY, Claude, Gemini & Cursor</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Account Roles: "Which Account Fits Your Workflow?" */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+        <div className="text-center space-y-2 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-1.5 text-xs font-mono text-teal-400 uppercase tracking-widest">
             <Users className="w-3.5 h-3.5" />
-            <span>Platform User Types (SRS Section 3)</span>
+            <span>ACCOUNT ROLES & ACCESS MODEL</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#f4f4f5]">
-            Which Account is for You?
+            Which Account Fits Your Workflow?
           </h2>
-          <p className="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto">
-            Our platform serves developers, open-source publishers, and autonomous agent engineers with dedicated roles.
+          <p className="text-xs sm:text-sm text-zinc-400">
+            Engineered for developers consuming capabilities, publishers distributing verified tools, and workspace composers.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Persona 1: Developer */}
-          <div className="rounded-2xl bg-[#18191e]/60 border border-[#2e3039] p-6 space-y-4 hover:border-teal-500/40 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
-              <Compass className="w-5 h-5" />
+          <div className="rounded-2xl bg-[#18191e] border border-[#2e3039] p-6 space-y-5 hover:border-teal-500/40 transition-colors flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                <Compass className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[11px] font-mono uppercase text-teal-400 font-semibold tracking-wider">
+                  Role: DEVELOPER
+                </span>
+                <h3 className="text-lg font-bold text-[#f4f4f5]">The Capability Consumer</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                For engineers building agent applications. Search verified capabilities, inspect security reports,
+                save skills to personal collections, leave ratings, and install with one CLI command.
+              </p>
             </div>
-            <div className="space-y-1">
-              <span className="text-[11px] font-mono uppercase text-teal-400 font-semibold">Account Role: DEVELOPER</span>
-              <h3 className="text-lg font-bold text-[#f4f4f5]">The Skill Consumer</h3>
-            </div>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              For engineers building agent applications. Search verified capabilities, inspect security reports,
-              save skills to personal collections, leave ratings, and install with one CLI command.
-            </p>
-            <ul className="text-xs text-zinc-300 space-y-2 pt-2 border-t border-[#2e3039]/80 font-mono text-[11px]">
+            <ul className="text-xs text-zinc-300 space-y-2.5 pt-4 border-t border-[#2e3039] font-mono text-[11px]">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                Browse & Search Registry
+                <span>Search verified public registry</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                1-Vote & 1-Review per skill
+                <span>Submit 1-vote & 1-review per skill</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                Curate Personal Collections
+                <span>Bookmark personal skill collections</span>
               </li>
             </ul>
           </div>
 
           {/* Persona 2: Publisher */}
-          <div className="rounded-2xl bg-[#18191e]/60 border border-[#2e3039] p-6 space-y-4 hover:border-emerald-500/40 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <UploadCloud className="w-5 h-5" />
+          <div className="rounded-2xl bg-[#18191e] border border-[#2e3039] p-6 space-y-5 hover:border-teal-500/40 transition-colors flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                <UploadCloud className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[11px] font-mono uppercase text-teal-400 font-semibold tracking-wider">
+                  Role: PUBLISHER
+                </span>
+                <h3 className="text-lg font-bold text-[#f4f4f5]">The Tool Author</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                For developers and teams distributing agent skills. Register skills, sync from GitHub repos,
+                release immutable versions with SHA-256 hashes, and inspect automated security audit reports.
+              </p>
             </div>
-            <div className="space-y-1">
-              <span className="text-[11px] font-mono uppercase text-emerald-400 font-semibold">Account Role: PUBLISHER</span>
-              <h3 className="text-lg font-bold text-[#f4f4f5]">The Skill Author</h3>
-            </div>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              For developers and teams distributing agent skills. Register skills, sync from GitHub repos,
-              release immutable versions with SHA-256 hashes, and inspect automated security audit reports.
-            </p>
-            <ul className="text-xs text-zinc-300 space-y-2 pt-2 border-t border-[#2e3039]/80 font-mono text-[11px]">
+            <ul className="text-xs text-zinc-300 space-y-2.5 pt-4 border-t border-[#2e3039] font-mono text-[11px]">
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                Publish & Release SemVer
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>Publish SemVer versions to registry</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                Automated NVIDIA SkillSpector Scans
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>Automated NVIDIA SkillSpector AST scans</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                Track Community Feedback
+                <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>Review community feedback & ratings</span>
               </li>
             </ul>
           </div>
 
-          {/* Persona 3: Custom Creator */}
-          <div className="rounded-2xl bg-[#18191e]/60 border border-[#2e3039] p-6 space-y-4 hover:border-teal-500/40 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-300">
-              <Layers className="w-5 h-5" />
+          {/* Persona 3: Skill Composer */}
+          <div className="rounded-2xl bg-[#18191e] border border-[#2e3039] p-6 space-y-5 hover:border-teal-500/40 transition-colors flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                <Layers className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[11px] font-mono uppercase text-teal-400 font-semibold tracking-wider">
+                  Workspace Studio
+                </span>
+                <h3 className="text-lg font-bold text-[#f4f4f5]">The Skill Composer</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Combine multiple existing skills into custom agent bundles. Automatically harmonizes instructions,
+                tracks license obligations, and verifies output safety before export.
+              </p>
             </div>
-            <div className="space-y-1">
-              <span className="text-[11px] font-mono uppercase text-teal-400 font-semibold">Workspace Feature</span>
-              <h3 className="text-lg font-bold text-[#f4f4f5]">The Skill Composer</h3>
-            </div>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Combine multiple existing skills into custom agent bundles. Automatically harmonizes instructions,
-              tracks license obligations, and verifies output safety before export.
-            </p>
-            <ul className="text-xs text-zinc-300 space-y-2 pt-2 border-t border-[#2e3039]/80 font-mono text-[11px]">
+            <ul className="text-xs text-zinc-300 space-y-2.5 pt-4 border-t border-[#2e3039] font-mono text-[11px]">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                Multi-Skill Bundle Composition
+                <span>Multi-skill bundle composition</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                Provenance & License Lineage
+                <span>Automated license lineage tracking</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                1-Click Standard SKILL.md Export
+                <span>Export standardized SKILL.md bundles</span>
               </li>
             </ul>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 3. Real Skills Spotlight */}
-      <div className="w-full max-w-5xl space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#2e3039]/80 pb-4">
+      {/* 4. Featured Real Skills Spotlight */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2e3039] pb-4">
           <div>
-            <span className="text-xs font-mono text-teal-400 uppercase">INDEXED IN REGISTRY</span>
-            <h2 className="text-xl font-bold text-[#f4f4f5]">Featured Real-World Agent Skills</h2>
+            <span className="text-xs font-mono text-teal-400 uppercase tracking-wider">
+              FEATURED PACKAGES
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#f4f4f5]">
+              Trending Production Skills
+            </h2>
           </div>
           <Link
             href="/catalog"
             className="text-xs text-teal-400 hover:text-teal-300 font-mono flex items-center gap-1 self-start sm:self-center"
           >
-            View all skills <ArrowRight className="w-3.5 h-3.5" />
+            <span>Explore all packages</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Skill 1 */}
           <Link
             href="/skills/nvidia-skillspector"
-            className="p-5 rounded-2xl bg-[#18191e]/60 border border-[#2e3039] hover:border-teal-500/40 transition-all space-y-3 group"
+            className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] hover:border-teal-500/40 transition-all space-y-3.5 group flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="px-1.5 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px]">v1.2.0</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium">
-                100/100 CLEAN
-              </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="px-2 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px]">
+                  v1.2.0
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 text-[11px] font-medium border border-teal-500/20">
+                  100/100 CLEAN
+                </span>
+              </div>
+              <h3 className="font-bold text-[#f4f4f5] group-hover:text-teal-300 transition-colors text-sm">
+                NVIDIA SkillSpector Security Auditor
+              </h3>
+              <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                Official static security scanner for agent skills, detecting dangerous shell commands, credential exfiltration, and supply chain threats.
+              </p>
             </div>
-            <h3 className="font-bold text-[#f4f4f5] group-hover:text-teal-300 transition-colors text-sm">
-              NVIDIA SkillSpector Security Auditor
-            </h3>
-            <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
-              Official static security scanner for agent skills, detecting dangerous shell commands, credential exfiltration, and supply chain threats.
-            </p>
-            <div className="pt-2 flex items-center justify-between text-[11px] text-zinc-400 font-mono border-t border-[#2e3039]/60">
+            <div className="pt-3 flex items-center justify-between text-[11px] text-zinc-400 font-mono border-t border-[#2e3039]">
               <span>NVIDIA Security</span>
-              <span>Apache-2.0</span>
+              <span className="text-zinc-500">Apache-2.0</span>
             </div>
           </Link>
 
           {/* Skill 2 */}
           <Link
             href="/skills/google-gemini-live-api"
-            className="p-5 rounded-2xl bg-[#18191e]/60 border border-[#2e3039] hover:border-teal-500/40 transition-all space-y-3 group"
+            className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] hover:border-teal-500/40 transition-all space-y-3.5 group flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="px-1.5 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px]">v2.0.0</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium">
-                96/100 CLEAN
-              </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="px-2 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px]">
+                  v2.0.0
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 text-[11px] font-medium border border-teal-500/20">
+                  96/100 CLEAN
+                </span>
+              </div>
+              <h3 className="font-bold text-[#f4f4f5] group-hover:text-teal-300 transition-colors text-sm">
+                Google Gemini Multimodal Live API
+              </h3>
+              <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                Real-time bidirectional audio, vision, and text interaction skill with function calling and grounded search integration.
+              </p>
             </div>
-            <h3 className="font-bold text-[#f4f4f5] group-hover:text-teal-300 transition-colors text-sm">
-              Google Gemini Multimodal Live API
-            </h3>
-            <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
-              Real-time bidirectional audio, vision, and text interaction skill with function calling and grounded search integration.
-            </p>
-            <div className="pt-2 flex items-center justify-between text-[11px] text-zinc-400 font-mono border-t border-[#2e3039]/60">
+            <div className="pt-3 flex items-center justify-between text-[11px] text-zinc-400 font-mono border-t border-[#2e3039]">
               <span>Google Antigravity</span>
-              <span>Apache-2.0</span>
+              <span className="text-zinc-500">Apache-2.0</span>
             </div>
           </Link>
 
           {/* Skill 3 */}
           <Link
-            href="/skills/chrome-devtools-automation"
-            className="p-5 rounded-2xl bg-[#18191e]/60 border border-[#2e3039] hover:border-teal-500/40 transition-all space-y-3 group"
+            href="/skills/docker-container-manager"
+            className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] hover:border-teal-500/40 transition-all space-y-3.5 group flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between text-xs font-mono">
-              <span className="px-1.5 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px]">v1.5.0</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium">
-                94/100 CLEAN
-              </span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="px-2 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px]">
+                  v1.4.2
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 text-[11px] font-medium border border-teal-500/20">
+                  98/100 CLEAN
+                </span>
+              </div>
+              <h3 className="font-bold text-[#f4f4f5] group-hover:text-teal-300 transition-colors text-sm">
+                Docker Sandboxed Container Manager
+              </h3>
+              <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                Isolated sandbox execution environments with memory cgroups, bridge network namespaces, and rootless user permissions.
+              </p>
             </div>
-            <h3 className="font-bold text-[#f4f4f5] group-hover:text-teal-300 transition-colors text-sm">
-              Chrome DevTools Automation
-            </h3>
-            <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
-              Browser automation, end-to-end testing, and DOM inspection agent skill powered by Chrome DevTools Protocol and Puppeteer.
-            </p>
-            <div className="pt-2 flex items-center justify-between text-[11px] text-zinc-400 font-mono border-t border-[#2e3039]/60">
-              <span>Puppeteer Team</span>
-              <span>Apache-2.0</span>
+            <div className="pt-3 flex items-center justify-between text-[11px] text-zinc-400 font-mono border-t border-[#2e3039]">
+              <span>Docker Inc.</span>
+              <span className="text-zinc-500">MIT</span>
             </div>
           </Link>
         </div>
-      </div>
+      </section>
 
-      {/* 4. 4-Step Interactive Lifecycle */}
-      <div className="w-full max-w-5xl rounded-3xl bg-[#18191e]/40 border border-[#2e3039] p-8 space-y-8">
-        <div className="text-center space-y-2">
+      {/* 5. 4-Step Deterministic Pipeline */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 rounded-3xl bg-[#18191e] border border-[#2e3039] p-8 sm:p-10 space-y-10">
+        <div className="text-center space-y-2 max-w-xl mx-auto">
           <span className="text-xs font-mono text-teal-400 uppercase tracking-widest">
-            REGISTRY PIPELINE
+            DETERMINISTIC PIPELINE
           </span>
-          <h2 className="text-2xl font-bold text-[#f4f4f5]">How the Platform Works</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#f4f4f5]">
+            How the Registry Works
+          </h2>
+          <p className="text-xs sm:text-sm text-zinc-400">
+            Four automated verification gates execute on every package release.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="space-y-2">
-            <span className="text-xl font-bold font-mono text-teal-400">01</span>
+          <div className="p-5 rounded-xl bg-[#121316] border border-[#2e3039] space-y-3">
+            <span className="text-2xl font-bold font-mono text-teal-400">01</span>
             <h4 className="text-sm font-semibold text-[#f4f4f5]">GitHub Ingestion</h4>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Publishers submit public repositories. The pipeline parses metadata, extracts instructions, and records git commit revisions.
+              Publishers submit repository URLs. The ingestion engine parses metadata, extracts SKILL.md specs, and binds immutable git commit SHAs.
             </p>
           </div>
 
-          <div className="space-y-2">
-            <span className="text-xl font-bold font-mono text-teal-400">02</span>
-            <h4 className="text-sm font-semibold text-[#f4f4f5]">Security Auditing</h4>
+          <div className="p-5 rounded-xl bg-[#121316] border border-[#2e3039] space-y-3">
+            <span className="text-2xl font-bold font-mono text-teal-400">02</span>
+            <h4 className="text-sm font-semibold text-[#f4f4f5]">AST Security Scan</h4>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              NVIDIA SkillSpector static analysis scans scripts for dangerous commands, secret harvesting, and prompt injection attempts.
+              NVIDIA SkillSpector static analysis scans code patterns for destructive commands, secret leaks, reverse shells, and prompt injection signatures.
             </p>
           </div>
 
-          <div className="space-y-2">
-            <span className="text-xl font-bold font-mono text-teal-400">03</span>
-            <h4 className="text-sm font-semibold text-[#f4f4f5]">Grounded Discovery</h4>
+          <div className="p-5 rounded-xl bg-[#121316] border border-[#2e3039] space-y-3">
+            <span className="text-2xl font-bold font-mono text-teal-400">03</span>
+            <h4 className="text-sm font-semibold text-[#f4f4f5]">Intent Discovery</h4>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Users describe tasks in plain English. The AI engine ranks verified records with confidence scores and transparent reasons.
+              Developers describe agent tasks in natural language. Grounded retrieval ranks matching skills with transparent confidence scores and justification notes.
             </p>
           </div>
 
-          <div className="space-y-2">
-            <span className="text-xl font-bold font-mono text-teal-400">04</span>
+          <div className="p-5 rounded-xl bg-[#121316] border border-[#2e3039] space-y-3">
+            <span className="text-2xl font-bold font-mono text-teal-400">04</span>
             <h4 className="text-sm font-semibold text-[#f4f4f5]">Compose & Install</h4>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Combine multiple skills into audited bundles. Export standard SKILL.md packages or install directly into your coding agent.
+              Combine multiple skills into audited agent bundles. Export standardized SKILL.md packages or install immediately with one CLI command.
             </p>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

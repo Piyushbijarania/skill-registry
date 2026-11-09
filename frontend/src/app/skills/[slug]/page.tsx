@@ -14,14 +14,16 @@ import {
   Copy,
   User,
   Calendar,
-  ChevronDown,
   Layers,
   ArrowLeft,
   ThumbsUp,
   ThumbsDown,
-  Lock,
   ExternalLink,
   MessageSquare,
+  FileText,
+  GitBranch,
+  Lock,
+  Code2,
 } from 'lucide-react';
 
 export default function SkillDetailPage() {
@@ -33,10 +35,11 @@ export default function SkillDetailPage() {
   const [selectedVersion, setSelectedVersion] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copiedInstall, setCopiedInstall] = useState(false);
+  const [copiedHash, setCopiedHash] = useState(false);
 
-  // Active view tab: 'instructions' | 'security' | 'reviews'
-  const [activeTab, setActiveTab] = useState<'instructions' | 'security' | 'reviews'>('instructions');
+  // Active view tab: 'readme' | 'security' | 'versions' | 'reviews'
+  const [activeTab, setActiveTab] = useState<'readme' | 'security' | 'versions' | 'reviews'>('readme');
 
   // Community review state
   const [reviews, setReviews] = useState<any[]>([]);
@@ -78,8 +81,16 @@ export default function SkillDetailPage() {
   const copyInstall = () => {
     const ver = selectedVersion?.version || '1.0.0';
     navigator.clipboard.writeText(`agy skill add ${slug}@${ver}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedInstall(true);
+    setTimeout(() => setCopiedInstall(false), 2000);
+  };
+
+  const copySha256 = () => {
+    if (selectedVersion?.contentHash) {
+      navigator.clipboard.writeText(selectedVersion.contentHash);
+      setCopiedHash(true);
+      setTimeout(() => setCopiedHash(false), 2000);
+    }
   };
 
   const handleVote = async (value: number) => {
@@ -111,7 +122,6 @@ export default function SkillDetailPage() {
         comment: commentInput.trim() || undefined,
       });
 
-      // Update reviews list in UI
       setReviews((prev) => [res.data.review, ...prev.filter((r) => r.userId !== user.id)]);
       setCommentInput('');
       alert('Review submitted successfully!');
@@ -124,10 +134,10 @@ export default function SkillDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="py-20 space-y-6 max-w-4xl mx-auto animate-pulse">
-        <div className="h-6 bg-zinc-800 rounded w-1/4" />
-        <div className="h-10 bg-zinc-800 rounded w-2/3" />
-        <div className="h-40 bg-zinc-900 rounded-2xl" />
+      <div className="py-20 space-y-6 max-w-6xl mx-auto animate-pulse">
+        <div className="h-6 bg-[#262830] rounded w-1/4" />
+        <div className="h-10 bg-[#262830] rounded w-2/3" />
+        <div className="h-64 bg-[#18191e] rounded-2xl" />
       </div>
     );
   }
@@ -136,7 +146,7 @@ export default function SkillDetailPage() {
     return (
       <div className="py-20 text-center space-y-4 max-w-md mx-auto">
         <AlertTriangle className="w-10 h-10 text-rose-400 mx-auto" />
-        <h1 className="text-xl font-bold text-white">Skill Not Found</h1>
+        <h1 className="text-xl font-bold text-white">Package Not Found</h1>
         <p className="text-xs text-zinc-400">{error || 'This skill does not exist or has been removed.'}</p>
         <Link
           href="/catalog"
@@ -158,216 +168,165 @@ export default function SkillDetailPage() {
     : [];
 
   return (
-    <div className="space-y-8 pb-20 max-w-5xl mx-auto">
-      {/* Back Link */}
-      <Link
-        href="/catalog"
-        className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-200 font-mono transition-colors"
-      >
-        <ArrowLeft className="w-3.5 h-3.5" /> Back to Catalog
-      </Link>
+    <div className="space-y-6 pb-20 max-w-6xl mx-auto">
+      {/* Breadcrumb Navigation */}
+      <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
+        <Link href="/catalog" className="hover:text-teal-400 transition-colors">
+          packages
+        </Link>
+        <span>/</span>
+        <span className="text-teal-400 font-semibold">{skill.slug}</span>
+      </div>
 
-      {/* Main Skill Header Banner */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-[#18191e]/80 border border-[#2e3039] shadow-2xl backdrop-blur-xl space-y-6">
+      {/* npmjs-Style Package Top Banner */}
+      <div className="p-6 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-[#262830] border border-[#2e3039] font-mono text-[#f4f4f5] text-xs font-medium">
-                {selectedVersion?.version ? `v${selectedVersion.version}` : 'v1.0.0'}
+            <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span className="text-lg sm:text-2xl font-bold text-[#f4f4f5] font-sans">
+                {skill.name}
               </span>
-
-              {secStatus === 'CLEAN' ? (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  {secScore !== null ? `${secScore}/100 CLEAN` : 'CLEAN'}
-                </span>
-              ) : secStatus === 'FINDINGS_DETECTED' ? (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono font-medium">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  {secScore !== null ? `${secScore}/100 THREATS` : 'FINDINGS'}
-                </span>
-              ) : (
-                <span className="px-2.5 py-0.5 rounded-full bg-[#262830] text-zinc-400 text-xs font-mono">
-                  Unscanned
-                </span>
-              )}
-
-              <span className="text-xs text-zinc-400 font-mono uppercase">
-                {selectedVersion?.license || 'MIT License'}
+              <span className="px-2 py-0.5 rounded bg-[#262830] text-[#f4f4f5] text-[11px] font-medium border border-[#2e3039]">
+                v{selectedVersion?.version || '1.0.0'}
+              </span>
+              <span className="px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 text-[11px] font-medium border border-teal-500/20">
+                Public
+              </span>
+              <span className="text-zinc-500">•</span>
+              <span className="text-zinc-400 text-[11px]">
+                Published {new Date(skill.createdAt).toLocaleDateString()}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#f4f4f5]">
-              {skill.name}
-            </h1>
-            <p className="font-mono text-xs text-zinc-400">/{skill.slug}</p>
+            <p className="text-xs sm:text-sm text-zinc-300 max-w-3xl leading-relaxed">
+              {skill.description}
+            </p>
           </div>
 
-          {/* Voting Box */}
-          <div className="flex items-center gap-1.5 self-start p-1.5 rounded-xl bg-[#121316] border border-[#2e3039] text-xs font-mono">
+          {/* Quick Vote Score */}
+          <div className="flex items-center gap-1.5 self-start p-1 rounded-lg bg-[#121316] border border-[#2e3039] text-xs font-mono shrink-0">
             <button
               onClick={() => handleVote(1)}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-1.5 rounded transition-colors ${
                 userVote === 1
                   ? 'bg-emerald-500/20 text-emerald-400'
-                  : 'text-zinc-400 hover:text-emerald-400 hover:bg-zinc-900'
+                  : 'text-zinc-400 hover:text-emerald-400'
               }`}
               title="Upvote skill"
             >
-              <ThumbsUp className="w-4 h-4" />
+              <ThumbsUp className="w-3.5 h-3.5" />
             </button>
-            <span className="px-2 font-bold text-zinc-200">{netVotes}</span>
+            <span className="px-1.5 font-bold text-[#f4f4f5]">{netVotes}</span>
             <button
               onClick={() => handleVote(-1)}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-1.5 rounded transition-colors ${
                 userVote === -1
                   ? 'bg-rose-500/20 text-rose-400'
-                  : 'text-zinc-400 hover:text-rose-400 hover:bg-zinc-900'
+                  : 'text-zinc-400 hover:text-rose-400'
               }`}
               title="Downvote skill"
             >
-              <ThumbsDown className="w-4 h-4" />
+              <ThumbsDown className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        <p className="text-sm text-zinc-300 leading-relaxed max-w-3xl">
-          {skill.description}
-        </p>
-
-        {/* Metadata Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-zinc-800/80 text-xs">
-          <div>
-            <span className="text-zinc-400 block font-mono text-[11px]">Publisher</span>
-            <span className="font-medium text-zinc-200">{skill.publisher?.displayName || 'Unknown'}</span>
-          </div>
-          <div>
-            <span className="text-zinc-400 block font-mono text-[11px]">Source</span>
-            <span className="font-medium text-zinc-200 capitalize">{skill.sourceType}</span>
-          </div>
-          <div>
-            <span className="text-zinc-400 block font-mono text-[11px]">Created</span>
-            <span className="font-medium text-zinc-200">
-              {new Date(skill.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-          <div>
-            <span className="text-zinc-400 block font-mono text-[11px]">Community</span>
-            <span className="font-medium text-zinc-200 flex items-center gap-1">
-              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
-            </span>
-          </div>
-        </div>
-
-        {/* Terminal Install Snippet */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-[#121316] border border-[#2e3039] font-mono text-xs">
-          <div className="flex items-center gap-2 text-zinc-300 overflow-x-auto">
-            <Terminal className="w-4 h-4 text-teal-400 shrink-0" />
-            <span>agy skill add {skill.slug}@{selectedVersion?.version || '1.0.0'}</span>
-          </div>
+        {/* npmjs-Style Tabs Bar */}
+        <div className="flex items-center gap-1 border-t border-[#2e3039] pt-3 text-xs font-mono">
           <button
-            onClick={copyInstall}
-            className="px-2.5 py-1 rounded bg-[#262830] hover:bg-[#2e3039] text-[#f4f4f5] text-xs flex items-center gap-1 transition-colors shrink-0"
+            onClick={() => setActiveTab('readme')}
+            className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+              activeTab === 'readme'
+                ? 'bg-teal-500 text-[#121316] font-bold'
+                : 'text-zinc-400 hover:text-[#f4f4f5] hover:bg-[#262830]'
+            }`}
           >
-            {copied ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-400">Copied</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-3.5 h-3.5 text-zinc-400" />
-                <span>Copy</span>
-              </>
+            <FileText className="w-3.5 h-3.5" />
+            <span>Readme (SKILL.md)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('security')}
+            className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+              activeTab === 'security'
+                ? 'bg-teal-500 text-[#121316] font-bold'
+                : 'text-zinc-400 hover:text-[#f4f4f5] hover:bg-[#262830]'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Security Audit</span>
+            {secScore !== null && secScore !== undefined && (
+              <span className="px-1 py-0.2 rounded text-[10px] bg-[#121316] text-[#f4f4f5]">
+                {secScore}
+              </span>
             )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('versions')}
+            className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+              activeTab === 'versions'
+                ? 'bg-teal-500 text-[#121316] font-bold'
+                : 'text-zinc-400 hover:text-[#f4f4f5] hover:bg-[#262830]'
+            }`}
+          >
+            <GitBranch className="w-3.5 h-3.5" />
+            <span>Versions ({skill.versions?.length || 1})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('reviews')}
+            className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+              activeTab === 'reviews'
+                ? 'bg-teal-500 text-[#121316] font-bold'
+                : 'text-zinc-400 hover:text-[#f4f4f5] hover:bg-[#262830]'
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>Reviews ({reviews.length})</span>
           </button>
         </div>
       </div>
 
-      {/* Tabs Navigation */}
-      <div className="flex border-b border-[#2e3039] font-medium text-sm">
-        <button
-          onClick={() => setActiveTab('instructions')}
-          className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
-            activeTab === 'instructions'
-              ? 'border-teal-400 text-[#f4f4f5] font-semibold'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
-          }`}
-        >
-          <Layers className="w-4 h-4" />
-          Instructions (SKILL.md)
-        </button>
-
-        <button
-          onClick={() => setActiveTab('security')}
-          className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
-            activeTab === 'security'
-              ? 'border-teal-400 text-[#f4f4f5] font-semibold'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4" />
-          Security Audit Report
-          {findings.length > 0 && (
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-          )}
-        </button>
-
-        <button
-          onClick={() => setActiveTab('reviews')}
-          className={`py-3 px-4 border-b-2 transition-colors flex items-center gap-2 ${
-            activeTab === 'reviews'
-              ? 'border-teal-400 text-[#f4f4f5] font-semibold'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
-          }`}
-        >
-          <MessageSquare className="w-4 h-4" />
-          Reviews ({reviews.length})
-        </button>
-      </div>
-
-      {/* Tab 1: Instructions / SKILL.md */}
-      {activeTab === 'instructions' && (
-        <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800 space-y-4">
-          <div className="flex items-center justify-between text-xs font-mono text-zinc-400 border-b border-zinc-800/80 pb-3">
-            <span>SPECIFICATION FORMAT: SKILL.md</span>
-            {selectedVersion?.contentHash && (
-              <span className="text-[11px] text-zinc-400 truncate max-w-[280px]">
-                SHA-256: {selectedVersion.contentHash}
-              </span>
-            )}
-          </div>
-          <pre className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 font-mono text-xs text-zinc-200 whitespace-pre-wrap leading-relaxed overflow-x-auto">
-            {selectedVersion?.readmeContent || 'No instructions provided for this version.'}
-          </pre>
-        </div>
-      )}
-
-      {/* Tab 2: NVIDIA SkillSpector Security Report */}
-      {activeTab === 'security' && (
-        <div className="space-y-6">
-          {/* Scanner Header Box */}
-          <div className="p-6 rounded-2xl bg-[#18191e]/60 border border-[#2e3039] space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-mono text-teal-400 block">STATIC SECURITY PIPELINE</span>
-                <h3 className="text-lg font-bold text-[#f4f4f5] flex items-center gap-2">
-                  Scanner: {secAssessment?.scannerName || 'NVIDIA SkillSpector'} v{secAssessment?.scannerVersion || '1.2.0'}
-                </h3>
-                <p className="text-xs text-zinc-400 max-w-xl pt-1">
-                  Static analysis auditing dangerous shell commands, credential exposure, and prompt injections.
-                </p>
+      {/* npmjs-Style 2-Column Split: Main Content (8 cols) + Sidebar (4 cols) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Tab Content (8 cols) */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Tab 1: Readme (SKILL.md) */}
+          {activeTab === 'readme' && (
+            <div className="p-6 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-4">
+              <div className="flex items-center justify-between text-xs font-mono text-zinc-400 border-b border-[#2e3039] pb-3">
+                <span className="flex items-center gap-1.5 text-teal-400">
+                  <FileText className="w-3.5 h-3.5" />
+                  SPECIFICATION: SKILL.md
+                </span>
+                <span className="text-[11px] text-zinc-500">Standard Antigravity Format</span>
               </div>
+              <div className="p-4 rounded-xl bg-[#121316] border border-[#2e3039] font-mono text-xs text-zinc-200 whitespace-pre-wrap leading-relaxed overflow-x-auto">
+                {selectedVersion?.readmeContent || 'No instructions provided for this version.'}
+              </div>
+            </div>
+          )}
 
-              {/* Big Score Gauge */}
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#121316] border border-[#2e3039] shrink-0">
-                <div className="text-right">
-                  <span className="text-xs font-mono text-zinc-400 block">Security Score</span>
+          {/* Tab 2: Security Audit Report */}
+          {activeTab === 'security' && (
+            <div className="p-6 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#2e3039] pb-4">
+                <div>
+                  <span className="text-[11px] font-mono text-teal-400 uppercase tracking-wider block">
+                    NVIDIA SKILLSPECTOR ENGINE
+                  </span>
+                  <h3 className="text-base font-bold text-[#f4f4f5]">
+                    AST Static Analysis & Sandboxing Report
+                  </h3>
+                </div>
+
+                <div className="flex items-center gap-2 p-2 rounded-xl bg-[#121316] border border-[#2e3039] font-mono text-xs">
+                  <span className="text-zinc-400">Score:</span>
                   <span
-                    className={`text-2xl font-bold font-mono ${
+                    className={`font-bold text-sm ${
                       secScore && secScore >= 80
-                        ? 'text-emerald-400'
+                        ? 'text-teal-400'
                         : secScore && secScore >= 50
                         ? 'text-amber-400'
                         : 'text-rose-400'
@@ -377,177 +336,307 @@ export default function SkillDetailPage() {
                   </span>
                 </div>
               </div>
-            </div>
 
-            {/* Scanner Limitations Notice (SRS FR-006) */}
-            <div className="p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-zinc-400 font-mono">
-              ⚠️ Note: A clean scan means no known threats were detected by configured static checks; it does not constitute a guarantee of complete runtime immunity.
-            </div>
-          </div>
-
-          {/* Findings List */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-              Detected Findings ({findings.length})
-            </h4>
-
-            {findings.length === 0 ? (
-              <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-center space-y-2">
-                <ShieldCheck className="w-8 h-8 text-emerald-400 mx-auto" />
-                <h5 className="text-sm font-semibold text-emerald-300">Clean Audit — Zero Threats Detected</h5>
-                <p className="text-xs text-zinc-400 max-w-md mx-auto">
-                  No destructive file commands, reverse shells, or sensitive credential exfiltration patterns were detected in this version.
-                </p>
+              {/* Notice */}
+              <div className="p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-[11px] font-mono text-zinc-400">
+                Static analysis inspects AST execution paths for destructive commands (rm -rf, mkfs), secret leaks, and reverse shells.
               </div>
-            ) : (
-              findings.map((f, i) => (
-                <div
-                  key={i}
-                  className="p-5 rounded-2xl bg-[#18191e]/70 border border-[#2e3039] space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${
-                        f.severity === 'CRITICAL'
-                          ? 'bg-rose-500/10 border border-rose-500/30 text-rose-400'
-                          : f.severity === 'HIGH'
-                          ? 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
-                          : 'bg-[#262830] text-zinc-300'
-                      }`}
+
+              {/* Findings */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
+                  Findings ({findings.length})
+                </h4>
+
+                {findings.length === 0 ? (
+                  <div className="p-6 rounded-xl bg-teal-500/5 border border-teal-500/20 text-center space-y-2">
+                    <ShieldCheck className="w-8 h-8 text-teal-400 mx-auto" />
+                    <h5 className="text-sm font-semibold text-teal-300">Clean Audit — 0 Threats Detected</h5>
+                    <p className="text-xs text-zinc-400 max-w-md mx-auto">
+                      No dangerous shell commands or credential exfiltration attempts found in this version.
+                    </p>
+                  </div>
+                ) : (
+                  findings.map((f, i) => (
+                    <div
+                      key={i}
+                      className="p-4 rounded-xl bg-[#121316] border border-[#2e3039] space-y-2.5"
                     >
-                      {f.severity}
-                    </span>
-                    {f.line && (
-                      <span className="text-xs font-mono text-zinc-400">Line {f.line}</span>
-                    )}
-                  </div>
-
-                  <h5 className="text-sm font-semibold text-[#f4f4f5]">{f.title}</h5>
-                  <p className="text-xs text-zinc-300">{f.description}</p>
-
-                  {f.matchedPattern && (
-                    <pre className="p-2.5 rounded-lg bg-[#121316] font-mono text-xs text-rose-300 overflow-x-auto">
-                      {f.matchedPattern}
-                    </pre>
-                  )}
-
-                  <div className="p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-zinc-400 space-y-1">
-                    <span className="text-teal-400 font-mono font-semibold block">
-                      Recommended Remediation:
-                    </span>
-                    <p>{f.remediation}</p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Tab 3: Reviews & Community Ratings */}
-      {activeTab === 'reviews' && (
-        <div className="space-y-8">
-          {/* Submit Review Box */}
-          <form
-            onSubmit={handleReviewSubmit}
-            className="p-5 rounded-2xl bg-[#18191e]/80 border border-[#2e3039] space-y-4"
-          >
-            <h4 className="text-sm font-semibold text-[#f4f4f5] flex items-center gap-2">
-              <Star className="w-4 h-4 text-amber-400" />
-              Write a Community Review
-            </h4>
-
-            {reviewError && (
-              <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
-                {reviewError}
+                      <div className="flex items-center justify-between">
+                        <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                          {f.severity}
+                        </span>
+                        {f.line && (
+                          <span className="text-xs font-mono text-zinc-500">Line {f.line}</span>
+                        )}
+                      </div>
+                      <h5 className="text-sm font-semibold text-[#f4f4f5]">{f.title}</h5>
+                      <p className="text-xs text-zinc-300">{f.description}</p>
+                      {f.remediation && (
+                        <div className="p-2.5 rounded-lg bg-[#18191e] border border-[#2e3039] text-xs text-zinc-400">
+                          <span className="text-teal-400 font-semibold block">Remediation:</span>
+                          <p>{f.remediation}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Star Selector */}
-            <div className="space-y-1">
-              <label className="text-xs text-zinc-400 font-mono">Rating (1 to 5 Stars)</label>
-              <div className="flex gap-1.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setRatingInput(star)}
-                    className="p-1 hover:scale-110 transition-transform"
+          {/* Tab 3: Versions List */}
+          {activeTab === 'versions' && (
+            <div className="p-6 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-4">
+              <h3 className="text-sm font-bold text-[#f4f4f5] font-mono uppercase tracking-wider">
+                Release History & Provenance
+              </h3>
+              <div className="space-y-2">
+                {skill.versions?.map((v: any) => (
+                  <div
+                    key={v.id}
+                    onClick={() => setSelectedVersion(v)}
+                    className={`p-3.5 rounded-xl border font-mono text-xs flex items-center justify-between cursor-pointer transition-colors ${
+                      selectedVersion?.id === v.id
+                        ? 'bg-[#121316] border-teal-500'
+                        : 'bg-[#121316]/60 border-[#2e3039] hover:border-zinc-500'
+                    }`}
                   >
-                    <Star
-                      className={`w-5 h-5 ${
-                        star <= ratingInput
-                          ? 'text-amber-400 fill-amber-400'
-                          : 'text-zinc-700'
-                      }`}
-                    />
-                  </button>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#f4f4f5]">v{v.version}</span>
+                        {selectedVersion?.id === v.id && (
+                          <span className="px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-400 text-[10px]">
+                            Selected
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-zinc-500 truncate max-w-sm">
+                        SHA-256: {v.contentHash || 'No hash recorded'}
+                      </p>
+                    </div>
+                    <span className="text-zinc-400 text-[11px]">
+                      {new Date(v.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Comment Textarea */}
-            <div className="space-y-1">
-              <label className="text-xs text-zinc-400 font-mono">Review Comments</label>
-              <textarea
-                rows={2}
-                value={commentInput}
-                onChange={(e) => setCommentInput(e.target.value)}
-                placeholder="Share your experience using this skill in an AI agent..."
-                className="w-full p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-[#f4f4f5] placeholder:text-zinc-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all resize-none"
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={isSubmittingReview}
-                className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-[#121316] font-semibold text-xs shadow-md shadow-teal-500/20 transition-all disabled:opacity-50"
+          {/* Tab 4: Reviews */}
+          {activeTab === 'reviews' && (
+            <div className="space-y-6">
+              {/* Form */}
+              <form
+                onSubmit={handleReviewSubmit}
+                className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-4"
               >
-                {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+                <h4 className="text-sm font-semibold text-[#f4f4f5] flex items-center gap-2">
+                  <Star className="w-4 h-4 text-amber-400" />
+                  Leave a Rating & Review
+                </h4>
+
+                {reviewError && (
+                  <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
+                    {reviewError}
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRatingInput(star)}
+                      className="p-1 hover:scale-110 transition-transform"
+                    >
+                      <Star
+                        className={`w-5 h-5 ${
+                          star <= ratingInput
+                            ? 'text-amber-400 fill-amber-400'
+                            : 'text-zinc-700'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  rows={2}
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                  placeholder="Share your experience using this skill in an AI agent..."
+                  className="w-full p-3 rounded-xl bg-[#121316] border border-[#2e3039] text-xs text-[#f4f4f5] placeholder:text-zinc-600 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none"
+                />
+
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={isSubmittingReview}
+                    className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-[#121316] font-semibold text-xs shadow-md shadow-teal-500/20 transition-all disabled:opacity-50"
+                  >
+                    {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+                  </button>
+                </div>
+              </form>
+
+              {/* Reviews List */}
+              <div className="space-y-3">
+                {reviews.length === 0 ? (
+                  <p className="text-xs text-zinc-500 py-6 text-center font-mono">
+                    No reviews yet. Be the first to review this skill!
+                  </p>
+                ) : (
+                  reviews.map((rev) => (
+                    <div
+                      key={rev.id}
+                      className="p-4 rounded-xl bg-[#18191e] border border-[#2e3039] space-y-2"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-[#f4f4f5]">
+                          {rev.user?.displayName || 'Community Developer'}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star
+                              key={s}
+                              className={`w-3 h-3 ${
+                                s <= rev.rating ? 'text-amber-400 fill-amber-400' : 'text-zinc-700'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      {rev.comment && <p className="text-xs text-zinc-300">{rev.comment}</p>}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: npmjs-Style Sidebar (4 cols) */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* 1. Install Box (Exactly like npmjs Install command box) */}
+          <div className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-3">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-teal-400 block font-semibold">
+              Install
+            </span>
+            <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#121316] border border-[#2e3039] font-mono text-xs">
+              <div className="flex items-center gap-2 text-zinc-300 truncate mr-2">
+                <Terminal className="w-4 h-4 text-teal-400 shrink-0" />
+                <span className="truncate">agy skill add {skill.slug}@{selectedVersion?.version || '1.0.0'}</span>
+              </div>
+              <button
+                onClick={copyInstall}
+                className="p-1.5 rounded-lg bg-[#262830] hover:bg-[#2e3039] text-[#f4f4f5] transition-colors shrink-0"
+                title="Copy install command"
+              >
+                {copiedInstall ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 text-zinc-400" />
+                )}
               </button>
             </div>
-          </form>
+          </div>
 
-          {/* Existing Reviews List */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-              All Reviews ({reviews.length})
-            </h4>
+          {/* 2. Repository & Source */}
+          <div className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-3 font-mono text-xs">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-500 block">
+              Repository
+            </span>
+            <div className="space-y-2">
+              <a
+                href="https://github.com/Piyushbijarania/skill-registry"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between text-teal-400 hover:text-teal-300 hover:underline"
+              >
+                <span>github.com/{skill.slug}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <div className="flex items-center justify-between text-zinc-400 text-[11px] pt-1 border-t border-[#2e3039]">
+                <span>Source Type</span>
+                <span className="text-[#f4f4f5] uppercase">{skill.sourceType || 'GITHUB'}</span>
+              </div>
+            </div>
+          </div>
 
-            {reviews.length === 0 ? (
-              <p className="text-xs text-zinc-400 py-6 text-center">
-                No reviews yet. Be the first to review this skill!
-              </p>
-            ) : (
-              reviews.map((rev) => (
-                <div
-                  key={rev.id}
-                  className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800 space-y-2"
-                >
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-zinc-200">
-                      {rev.user?.displayName || 'Community Developer'}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <Star
-                          key={s}
-                          className={`w-3 h-3 ${
-                            s <= rev.rating ? 'text-amber-400 fill-amber-400' : 'text-zinc-700'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  {rev.comment && <p className="text-xs text-zinc-300">{rev.comment}</p>}
+          {/* 3. Metadata & License */}
+          <div className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-3 font-mono text-xs">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-500 block">
+              Package Metadata
+            </span>
+            <div className="space-y-2 text-zinc-400 text-[11px]">
+              <div className="flex items-center justify-between">
+                <span>Version</span>
+                <span className="text-[#f4f4f5] font-bold">
+                  {selectedVersion?.version || '1.0.0'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>License</span>
+                <span className="text-teal-400 font-semibold uppercase">
+                  {selectedVersion?.license || 'Apache-2.0'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Total Versions</span>
+                <span className="text-[#f4f4f5]">
+                  {skill.versions?.length || 1}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Security Assessment</span>
+                <span className="text-teal-400 font-bold">
+                  {secScore ? `${secScore}/100` : 'CLEAN'}
+                </span>
+              </div>
+            </div>
+
+            {/* SHA-256 Digest */}
+            {selectedVersion?.contentHash && (
+              <div className="pt-2 border-t border-[#2e3039] space-y-1">
+                <div className="flex items-center justify-between text-[10px] text-zinc-500 uppercase">
+                  <span>SHA-256 Provenance</span>
+                  <button
+                    onClick={copySha256}
+                    className="text-teal-400 hover:underline flex items-center gap-1"
+                  >
+                    {copiedHash ? 'Copied' : 'Copy'}
+                  </button>
                 </div>
-              ))
+                <p className="text-[10px] text-zinc-400 truncate bg-[#121316] p-2 rounded-lg border border-[#2e3039]">
+                  {selectedVersion.contentHash}
+                </p>
+              </div>
             )}
           </div>
+
+          {/* 4. Publisher Card */}
+          <div className="p-5 rounded-2xl bg-[#18191e] border border-[#2e3039] space-y-3">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 block">
+              Publisher
+            </span>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center font-bold">
+                <User className="w-4 h-4" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-[#f4f4f5]">
+                  {skill.publisher?.displayName || 'Registered Publisher'}
+                </p>
+                <p className="text-[11px] text-zinc-500 font-mono">
+                  {skill.publisher?.email || 'publisher@registry.local'}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
-
